@@ -1,0 +1,191 @@
+[
+  {
+    "categoryName": "グループウェア",
+    "services": [
+      {
+        "serviceName": "Microsoft 365",
+        "plans": [
+          { "planName": "Business Basic", "price": 10788, "unit": "per_user_per_year" },
+          { "planName": "Business Standard", "price": 18720, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "サイボウズ Office",
+        "plans": [
+          { "planName": "スタンダード", "price": 7200, "unit": "per_user_per_year" },
+          { "planName": "プレミアム", "price": 12000, "unit": "per_user_per_year" }
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "ビデオ会議",
+    "services": [
+      {
+        "serviceName": "Zoom",
+        "plans": [
+          { "planName": "プロ", "price": 20000, "unit": "per_user_per_year" },
+          { "planName": "ビジネス", "price": 27500, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "Microsoft Teams",
+        "plans": [
+          { "planName": "Essentials", "price": 7920, "unit": "per_user_per_year" }
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "ビジネスチャット",
+    "services": [
+      {
+        "serviceName": "Slack",
+        "plans": [
+          { "planName": "プロ", "price": 13050, "unit": "per_user_per_year" },
+          { "planName": "ビジネスプラス", "price": 22500, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "Chatwork",
+        "plans": [
+          { "planName": "ビジネス", "price": 8400, "unit": "per_user_per_year" },
+          { "planName": "エンタープライズ", "price": 14400, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "LINE WORKS",
+        "plans": [
+          { "planName": "スタンダード", "price": 5400, "unit": "per_user_per_year" }
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "クラウドストレージ",
+    "services": [
+      {
+        "serviceName": "Dropbox",
+        "plans": [
+          { "planName": "Standard (Business)", "price": 27000, "unit": "per_user_per_year" },
+          { "planName": "Advanced (Business)", "price": 43200, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "Box",
+        "plans": [
+          { "planName": "Business", "price": 21600, "unit": "per_user_per_year" },
+          { "planName": "Business Plus", "price": 36000, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "OneDrive",
+        "plans": [
+          { "planName": "for Business (Plan 1)", "price": 7560, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "社内サーバー",
+        "plans": [
+          { "planName": "10名規模", "price": 32000, "unit": "per_user_per_year" },
+          { "planName": "20名規模", "price": 16000, "unit": "per_user_per_year" },
+          { "planName": "50名規模", "price": 6400, "unit": "per_user_per_year" }
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "生成AI",
+    "services": [
+      {
+        "serviceName": "ChatGPT",
+        "plans": [
+          { "planName": "Plus", "price": 36240, "unit": "per_user_per_year" },
+          { "planName": "Team", "price": 45000, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "Claude",
+        "plans": [
+          { "planName": "Pro", "price": 30000, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "Microsoft Copilot",
+        "plans": [
+          { "planName": "for Microsoft 365", "price": 53964, "unit": "per_user_per_year" }
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "BIツール",
+    "services": [
+      {
+        "serviceName": "Tableau",
+        "plans": [
+          { "planName": "Creator", "price": 105000, "unit": "per_user_per_year" },
+          { "planName": "Explorer", "price": 63000, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "Power BI",
+        "plans": [
+          { "planName": "Pro", "price": 15120, "unit": "per_user_per_year" },
+          { "planName": "Premium", "price": 60000, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "Metabase",
+        "plans": [
+          { "planName": "Pro", "price": 102000, "unit": "per_user_per_year" }
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "CRMツール",
+    "services": [
+      {
+        "serviceName": "Salesforce",
+        "plans": [
+          { "planName": "Essentials", "price": 36000, "unit": "per_user_per_year" },
+          { "planName": "Professional", "price": 108000, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "HubSpot",
+        "plans": [
+          { "planName": "Starter", "price": 21600, "unit": "per_user_per_year" },
+          { "planName": "Professional", "price": 108000, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "Zoho CRM",
+        "plans": [
+          { "planName": "Standard", "price": 28800, "unit": "per_user_per_year" },
+          { "planName": "Professional", "price": 43200, "unit": "per_user_per_year" }
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "ノーコード/ローコード",
+    "services": [
+      {
+        "serviceName": "Kintone",
+        "plans": [
+          { "planName": "ライトコース", "price": 10800, "unit": "per_user_per_year" },
+          { "planName": "スタンダードコース", "price": 21600, "unit": "per_user_per_year" }
+        ]
+      },
+      {
+        "serviceName": "Power Apps",
+        "plans": [
+          { "planName": "Per App", "price": 15120, "unit": "per_user_per_year" },
+          { "planName": "Per User", "price": 60480, "unit": "per_user_per_year" }
+        ]
+      }
+    ]
+  }
+]

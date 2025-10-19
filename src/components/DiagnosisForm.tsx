@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
-import { diagnosisFormSchema } from "@/lib/validation";
+import { diagnosisFormSchema, step1Schema, step2Schema, step3Schema, step4Schema } from "@/lib/validation";
 import type { DiagnosisFormData, Category } from "@/types";
 import servicesData from "@/data/services-pricing.json";
 import { calculateCost } from "@/lib/calculator";
@@ -28,15 +28,20 @@ export default function DiagnosisForm() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [stepErrors, setStepErrors] = useState<string[]>([]);
+  const [bounceEmoji, setBounceEmoji] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     watch,
     setValue,
+    trigger,
+    getValues,
     formState: { errors },
   } = useForm<DiagnosisFormData>({
     resolver: zodResolver(diagnosisFormSchema),
+    mode: "onChange",
     defaultValues: {
       employeeCount: 10,
     },
@@ -47,13 +52,16 @@ export default function DiagnosisForm() {
 
   // 選択されたサービスを監視
   const selectedGroupware = watch("groupware");
+  const selectedGroupwarePaymentMethod = watch("groupwarePaymentMethod");
   const selectedVideoConference = watch("videoConference");
   const selectedBusinessChat = watch("businessChat");
   const selectedStorage = watch("storage");
+  const selectedStoragePaymentMethod = watch("storagePaymentMethod");
   const selectedAI = watch("ai");
   const selectedBITool = watch("biTool");
   const selectedCRMTool = watch("crmTool");
   const selectedNocodeTool = watch("nocodeTool");
+  const selectedSatisfaction = watch("satisfaction");
 
   // 各カテゴリのサービスを取得
   const groupwareCategory = categories.find(
@@ -108,12 +116,89 @@ export default function DiagnosisForm() {
     }
   };
 
-  const nextStep = () => {
-    if (step < totalSteps) setStep(step + 1);
+  const validateStep = async (currentStep: number): Promise<boolean> => {
+    setStepErrors([]);
+    const formData = getValues();
+
+    try {
+      switch (currentStep) {
+        case 1:
+          await step1Schema.parseAsync({
+            companyName: formData.companyName,
+            employeeCount: formData.employeeCount,
+            name: formData.name,
+            email: formData.email,
+          });
+          break;
+        case 2:
+          await step2Schema.parseAsync({
+            groupware: formData.groupware,
+            groupwarePlan: formData.groupwarePlan,
+            groupwareLicenses: formData.groupwareLicenses,
+            groupwarePaymentMethod: formData.groupwarePaymentMethod,
+            groupwarePurchaseCost: formData.groupwarePurchaseCost,
+            groupwareReplaceYears: formData.groupwareReplaceYears,
+            groupwareLeaseCost: formData.groupwareLeaseCost,
+            videoConference: formData.videoConference,
+            videoConferencePlan: formData.videoConferencePlan,
+            videoConferenceLicenses: formData.videoConferenceLicenses,
+            businessChat: formData.businessChat,
+            businessChatPlan: formData.businessChatPlan,
+            businessChatLicenses: formData.businessChatLicenses,
+            storage: formData.storage,
+            storagePlan: formData.storagePlan,
+            storageLicenses: formData.storageLicenses,
+            storagePaymentMethod: formData.storagePaymentMethod,
+            storagePurchaseCost: formData.storagePurchaseCost,
+            storageReplaceYears: formData.storageReplaceYears,
+            storageLeaseCost: formData.storageLeaseCost,
+          });
+          break;
+        case 3:
+          await step3Schema.parseAsync({
+            ai: formData.ai,
+            aiPlan: formData.aiPlan,
+            aiLicenses: formData.aiLicenses,
+            biTool: formData.biTool,
+            biToolPlan: formData.biToolPlan,
+            biToolLicenses: formData.biToolLicenses,
+            crmTool: formData.crmTool,
+            crmToolPlan: formData.crmToolPlan,
+            crmToolLicenses: formData.crmToolLicenses,
+            nocodeTool: formData.nocodeTool,
+            nocodeToolPlan: formData.nocodeToolPlan,
+            nocodeToolLicenses: formData.nocodeToolLicenses,
+          });
+          break;
+        case 4:
+          await step4Schema.parseAsync({
+            satisfaction: formData.satisfaction,
+          });
+          break;
+      }
+      return true;
+    } catch (error: any) {
+      if (error.errors) {
+        const errorMessages = error.errors.map((err: any) => err.message);
+        setStepErrors(errorMessages);
+      }
+      return false;
+    }
+  };
+
+  const nextStep = async () => {
+    const isValid = await validateStep(step);
+    if (isValid && step < totalSteps) {
+      setStep(step + 1);
+      setStepErrors([]);
+    }
   };
 
   const prevStep = () => {
-    if (step > 1) setStep(step - 1);
+    if (step > 1) {
+      setStep(step - 1);
+      setStepErrors([]);
+    }
   };
 
   return (
@@ -125,28 +210,131 @@ export default function DiagnosisForm() {
           </CardTitle>
           <div className="mt-4">
             <div className="flex justify-between text-sm text-gray-600 mb-2">
-              <span>ステップ {step} / {totalSteps}</span>
-              <span>{Math.round(progress)}%</span>
+              <span className="font-semibold">ステップ {step} / {totalSteps}</span>
+              <span className="font-semibold text-blue-600">{Math.round(progress)}%</span>
             </div>
-            <Progress value={progress} />
+            <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-blue-500 via-cyan-500 to-green-500 transition-all duration-500 ease-out"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* ステップ1: グループウェア */}
+            {/* ステップ1: ユーザー情報 */}
             {step === 1 && (
-              <div className="space-y-6">
+              <div className="space-y-6 animate-fade-in">
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-bold mb-2">まずは基本情報を教えてください</h3>
+                  <p className="text-gray-600">診断結果をお送りするために必要な情報です</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="companyName">会社名 *</Label>
+                  <Input
+                    id="companyName"
+                    {...register("companyName")}
+                    placeholder="株式会社○○"
+                    className="focus:ring-2 focus:ring-blue-500 focus:scale-[1.02] transition-all duration-200"
+                  />
+                  {errors.companyName && (
+                    <p className="text-sm text-red-500 flex items-center gap-1">
+                      <span>⚠</span>
+                      {errors.companyName.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="employeeCount">従業員数 *</Label>
+                  <Input
+                    id="employeeCount"
+                    type="number"
+                    {...register("employeeCount", { valueAsNumber: true })}
+                    placeholder="10"
+                    className="focus:ring-2 focus:ring-blue-500 focus:scale-[1.02] transition-all duration-200"
+                  />
+                  {errors.employeeCount && (
+                    <p className="text-sm text-red-500 flex items-center gap-1">
+                      <span>⚠</span>
+                      {errors.employeeCount.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="name">お名前 *</Label>
+                  <Input
+                    id="name"
+                    {...register("name")}
+                    placeholder="山田 太郎"
+                    className="focus:ring-2 focus:ring-blue-500 focus:scale-[1.02] transition-all duration-200"
+                  />
+                  {errors.name && (
+                    <p className="text-sm text-red-500 flex items-center gap-1">
+                      <span>⚠</span>
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">メールアドレス *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    {...register("email")}
+                    placeholder="example@company.com"
+                    className="focus:ring-2 focus:ring-blue-500 focus:scale-[1.02] transition-all duration-200"
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-red-500 flex items-center gap-1">
+                      <span>⚠</span>
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Step validation errors */}
+                {stepErrors.length > 0 && (
+                  <div className="animate-shake bg-red-50 border-2 border-red-300 rounded-lg p-4">
+                    {stepErrors.map((error, index) => (
+                      <p key={index} className="text-sm text-red-600 flex items-center gap-2">
+                        <span className="text-lg">⚠️</span>
+                        {error}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex justify-end">
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="hover:scale-105 transition-transform bg-gradient-to-r from-blue-600 to-cyan-600"
+                  >
+                    次へ →
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* ステップ2: グループウェア */}
+            {step === 2 && (
+              <div className="space-y-6 animate-fade-in">
                 <h3 className="text-lg font-semibold">
                   現在のグループウェアの利用状況
                 </h3>
 
                 <div className="space-y-2">
-                  <Label>グループウェアを利用していますか？</Label>
+                  <Label>グループウェアを利用していますか？ *</Label>
                   <Select
                     value={selectedGroupware}
                     onValueChange={(value) => setValue("groupware", value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="focus:ring-2 focus:ring-blue-500">
                       <SelectValue placeholder="選択してください" />
                     </SelectTrigger>
                     <SelectContent>
@@ -168,13 +356,13 @@ export default function DiagnosisForm() {
                 {selectedGroupware && selectedGroupware !== "利用していない" && (
                   <>
                     <div className="space-y-2">
-                      <Label>プラン</Label>
+                      <Label>プラン *</Label>
                       <Select
                         onValueChange={(value) =>
                           setValue("groupwarePlan", value)
                         }
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="focus:ring-2 focus:ring-blue-500">
                           <SelectValue placeholder="選択してください" />
                         </SelectTrigger>
                         <SelectContent>
@@ -194,29 +382,45 @@ export default function DiagnosisForm() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>ライセンス数</Label>
+                      <Label>ライセンス数 *</Label>
                       <Input
                         type="number"
                         {...register("groupwareLicenses", {
                           valueAsNumber: true,
                         })}
                         placeholder="10"
+                        className="focus:ring-2 focus:ring-blue-500 transition-all"
                       />
                     </div>
                   </>
                 )}
 
-                <div className="flex justify-end">
-                  <Button type="button" onClick={nextStep}>
-                    次へ
+                {/* Step validation errors */}
+                {stepErrors.length > 0 && (
+                  <div className="animate-shake bg-red-50 border-2 border-red-300 rounded-lg p-4">
+                    {stepErrors.map((error, index) => (
+                      <p key={index} className="text-sm text-red-600 flex items-center gap-2">
+                        <span className="text-lg">⚠️</span>
+                        {error}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex justify-between">
+                  <Button type="button" variant="outline" onClick={prevStep} className="hover:scale-105 transition-transform">
+                    ← 戻る
+                  </Button>
+                  <Button type="button" onClick={nextStep} className="hover:scale-105 transition-transform bg-gradient-to-r from-blue-600 to-cyan-600">
+                    次へ →
                   </Button>
                 </div>
               </div>
             )}
 
-            {/* ステップ2: 各種サービス */}
-            {step === 2 && (
-              <div className="space-y-6">
+            {/* ステップ3: 各種サービス */}
+            {step === 3 && (
+              <div className="space-y-6 animate-fade-in">
                 <h3 className="text-lg font-semibold">
                   現在利用している各種サービス
                 </h3>
@@ -383,40 +587,107 @@ export default function DiagnosisForm() {
 
                     {selectedStorage && selectedStorage !== "利用していない" && (
                       <>
-                        {selectedStorage !== "社内サーバー" && (
-                          <Select
-                            onValueChange={(value) =>
-                              setValue("storagePlan", value)
-                            }
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="プランを選択" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="プランが分からない">
-                                プランが分からない
-                              </SelectItem>
-                              {getPlansForService(
-                                "クラウドストレージ",
-                                selectedStorage
-                              ).map((plan) => (
-                                <SelectItem
-                                  key={plan.planName}
-                                  value={plan.planName}
-                                >
-                                  {plan.planName}
+                        {selectedStorage === "社内サーバー" ? (
+                          <>
+                            <div className="space-y-2">
+                              <Label>支払い方法</Label>
+                              <RadioGroup
+                                value={selectedStoragePaymentMethod}
+                                onValueChange={(value: "purchase" | "lease") =>
+                                  setValue("storagePaymentMethod", value)
+                                }
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <RadioGroupItem value="purchase" id="storage-purchase" />
+                                  <Label htmlFor="storage-purchase">買い上げ</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <RadioGroupItem value="lease" id="storage-lease" />
+                                  <Label htmlFor="storage-lease">リース</Label>
+                                </div>
+                              </RadioGroup>
+                            </div>
+
+                            {selectedStoragePaymentMethod === "purchase" && (
+                              <>
+                                <div className="space-y-2">
+                                  <Label>機器購入費用（円）</Label>
+                                  <Input
+                                    type="number"
+                                    {...register("storagePurchaseCost", {
+                                      valueAsNumber: true,
+                                    })}
+                                    placeholder="例: 500000"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label>買い替え年数</Label>
+                                  <Input
+                                    type="number"
+                                    {...register("storageReplaceYears", {
+                                      valueAsNumber: true,
+                                    })}
+                                    placeholder="例: 5"
+                                  />
+                                  <p className="text-xs text-gray-500">
+                                    何年ごとに買い替えるかを入力してください
+                                  </p>
+                                </div>
+                              </>
+                            )}
+
+                            {selectedStoragePaymentMethod === "lease" && (
+                              <div className="space-y-2">
+                                <Label>年額リース料金（円）</Label>
+                                <Input
+                                  type="number"
+                                  {...register("storageLeaseCost", {
+                                    valueAsNumber: true,
+                                  })}
+                                  placeholder="例: 140000"
+                                />
+                                <p className="text-xs text-gray-500">
+                                  5年リースで70万円の場合、年額14万円と入力
+                                </p>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <Select
+                              onValueChange={(value) =>
+                                setValue("storagePlan", value)
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="プランを選択" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="プランが分からない">
+                                  プランが分からない
                                 </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                                {getPlansForService(
+                                  "クラウドストレージ",
+                                  selectedStorage
+                                ).map((plan) => (
+                                  <SelectItem
+                                    key={plan.planName}
+                                    value={plan.planName}
+                                  >
+                                    {plan.planName}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <Input
+                              type="number"
+                              {...register("storageLicenses", {
+                                valueAsNumber: true,
+                              })}
+                              placeholder="ライセンス数"
+                            />
+                          </>
                         )}
-                        <Input
-                          type="number"
-                          {...register("storageLicenses", {
-                            valueAsNumber: true,
-                          })}
-                          placeholder="ライセンス数"
-                        />
                       </>
                     )}
                   </div>
@@ -662,84 +933,24 @@ export default function DiagnosisForm() {
                   </div>
                 </div>
 
-                <div className="flex justify-between">
-                  <Button type="button" variant="outline" onClick={prevStep}>
-                    戻る
-                  </Button>
-                  <Button type="button" onClick={nextStep}>
-                    次へ
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* ステップ3: ユーザー情報 */}
-            {step === 3 && (
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold">ユーザー情報</h3>
-
-                <div className="space-y-2">
-                  <Label htmlFor="companyName">会社名 *</Label>
-                  <Input
-                    id="companyName"
-                    {...register("companyName")}
-                    placeholder="株式会社○○"
-                  />
-                  {errors.companyName && (
-                    <p className="text-sm text-red-500">
-                      {errors.companyName.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="employeeCount">従業員数 *</Label>
-                  <Input
-                    id="employeeCount"
-                    type="number"
-                    {...register("employeeCount", { valueAsNumber: true })}
-                    placeholder="10"
-                  />
-                  {errors.employeeCount && (
-                    <p className="text-sm text-red-500">
-                      {errors.employeeCount.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="name">お名前 *</Label>
-                  <Input
-                    id="name"
-                    {...register("name")}
-                    placeholder="山田 太郎"
-                  />
-                  {errors.name && (
-                    <p className="text-sm text-red-500">{errors.name.message}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">メールアドレス *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    {...register("email")}
-                    placeholder="example@company.com"
-                  />
-                  {errors.email && (
-                    <p className="text-sm text-red-500">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
+                {/* Step validation errors */}
+                {stepErrors.length > 0 && (
+                  <div className="animate-shake bg-red-50 border-2 border-red-300 rounded-lg p-4">
+                    {stepErrors.map((error, index) => (
+                      <p key={index} className="text-sm text-red-600 flex items-center gap-2">
+                        <span className="text-lg">⚠️</span>
+                        {error}
+                      </p>
+                    ))}
+                  </div>
+                )}
 
                 <div className="flex justify-between">
-                  <Button type="button" variant="outline" onClick={prevStep}>
-                    戻る
+                  <Button type="button" variant="outline" onClick={prevStep} className="hover:scale-105 transition-transform">
+                    ← 戻る
                   </Button>
-                  <Button type="button" onClick={nextStep}>
-                    次へ
+                  <Button type="button" onClick={nextStep} className="hover:scale-105 transition-transform bg-gradient-to-r from-blue-600 to-cyan-600">
+                    次へ →
                   </Button>
                 </div>
               </div>
@@ -747,35 +958,93 @@ export default function DiagnosisForm() {
 
             {/* ステップ4: 満足度 */}
             {step === 4 && (
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold">現在の満足度</h3>
-
-                <div className="space-y-2">
-                  <Label>現在のIT環境（各種ツール）の満足度を教えてください</Label>
-                  <RadioGroup
-                    onValueChange={(value) => setValue("satisfaction", value)}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="満足" id="満足" />
-                      <Label htmlFor="満足">満足</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="普通" id="普通" />
-                      <Label htmlFor="普通">普通</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="不満" id="不満" />
-                      <Label htmlFor="不満">不満</Label>
-                    </div>
-                  </RadioGroup>
+              <div className="space-y-8 animate-fade-in">
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold mb-2">最後の質問です！</h3>
+                  <p className="text-gray-600">現在のIT環境（各種ツール）の満足度を教えてください</p>
                 </div>
 
-                <div className="flex justify-between">
-                  <Button type="button" variant="outline" onClick={prevStep}>
-                    戻る
+                <div className="flex justify-center gap-6 md:gap-12">
+                  {[
+                    { value: "不満", emoji: "😞", label: "不満", color: "from-red-400 to-pink-400" },
+                    { value: "普通", emoji: "😐", label: "普通", color: "from-yellow-400 to-orange-400" },
+                    { value: "満足", emoji: "😊", label: "満足", color: "from-green-400 to-emerald-400" },
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => {
+                        setValue("satisfaction", option.value);
+                        setBounceEmoji(option.value);
+                        setTimeout(() => setBounceEmoji(null), 600);
+                      }}
+                      className={`
+                        relative flex flex-col items-center gap-2 p-4 md:p-6 rounded-2xl
+                        transition-all duration-300 cursor-pointer
+                        ${
+                          selectedSatisfaction === option.value
+                            ? `scale-110 bg-gradient-to-br ${option.color} shadow-2xl`
+                            : "scale-100 bg-gray-100 hover:scale-105 hover:shadow-lg"
+                        }
+                      `}
+                    >
+                      <div
+                        className={`
+                          text-6xl md:text-7xl transition-all duration-300
+                          ${
+                            bounceEmoji === option.value
+                              ? "animate-bounce-once"
+                              : selectedSatisfaction === option.value
+                              ? ""
+                              : "grayscale hover:grayscale-0"
+                          }
+                        `}
+                      >
+                        {option.emoji}
+                      </div>
+                      <span
+                        className={`
+                          text-sm md:text-base font-semibold
+                          ${
+                            selectedSatisfaction === option.value
+                              ? "text-white"
+                              : "text-gray-600"
+                          }
+                        `}
+                      >
+                        {option.label}
+                      </span>
+                      {selectedSatisfaction === option.value && (
+                        <div className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
+                          <span className="text-green-600 text-xl">✓</span>
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Step validation errors */}
+                {stepErrors.length > 0 && (
+                  <div className="animate-shake bg-red-50 border-2 border-red-300 rounded-lg p-4">
+                    {stepErrors.map((error, index) => (
+                      <p key={index} className="text-sm text-red-600 flex items-center gap-2">
+                        <span className="text-lg">⚠️</span>
+                        {error}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex justify-between mt-8">
+                  <Button type="button" variant="outline" onClick={prevStep} className="hover:scale-105 transition-transform">
+                    ← 戻る
                   </Button>
-                  <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? "診断中..." : "診断結果を見る"}
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="hover:scale-105 transition-transform bg-gradient-to-r from-blue-600 to-cyan-600"
+                  >
+                    {isSubmitting ? "診断中..." : "診断結果を見る →"}
                   </Button>
                 </div>
               </div>

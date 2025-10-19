@@ -5,7 +5,12 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-50">
       {/* ヘッダー */}
       <header className="bg-white shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
+        <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 flex items-center gap-3 md:gap-4">
+          <img
+            src="/logos/company-logo.png"
+            alt="ShigApps Logo"
+            className="h-8 md:h-10 w-auto object-contain"
+          />
           <h1 className="text-xl md:text-2xl font-bold text-blue-600">
             Google Workspace コスト削減診断
           </h1>
@@ -23,17 +28,17 @@ export default function Home() {
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-block mb-4 px-4 py-2 bg-blue-100 rounded-full">
             <p className="text-sm md:text-base font-semibold text-blue-700">
-              ✨ たった3分で診断完了！
+              ✨ カンタン入力で3分診断！
             </p>
           </div>
 
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            SaaSコスト、
+            ITツール費用、
             <br className="md:hidden" />
             まとめて削減しませんか？
             <br />
             <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-              Google Workspace で最大40%削減
+              Google Workspace で最大50%削減
             </span>
           </h2>
 
@@ -53,9 +58,9 @@ export default function Home() {
             </div>
             <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
               <p className="text-2xl md:text-4xl font-bold text-blue-600 mb-1">
-                500+
+                250+
               </p>
-              <p className="text-xs md:text-sm text-gray-600">導入企業数</p>
+              <p className="text-xs md:text-sm text-gray-600">弊社導入企業数</p>
             </div>
             <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
               <p className="text-2xl md:text-4xl font-bold text-blue-600 mb-1">
@@ -85,13 +90,13 @@ export default function Home() {
 
       {/* ビフォーアフター比較 */}
       <section className="py-12 md:py-20 px-4 bg-white" id="benefits">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <h3 className="text-2xl md:text-4xl font-bold text-center mb-12 md:mb-16">
             Google Workspace 導入で変わること
           </h3>
 
-          {/* 比較図 */}
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 mb-16">
+          {/* 比較図（縦並び） */}
+          <div className="space-y-8">
             {/* Before */}
             <div className="relative">
               <div className="absolute -top-4 left-4 bg-red-100 text-red-700 px-4 py-1 rounded-full text-sm font-semibold">
@@ -102,21 +107,28 @@ export default function Home() {
                   バラバラなSaaS環境
                 </h4>
                 <div className="space-y-3">
-                  {["Slack", "Zoom", "Dropbox", "ChatGPT", "Kintone", "Salesforce"].map(
-                    (service) => (
-                      <div
-                        key={service}
-                        className="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm"
-                      >
-                        <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-xs font-bold">
-                          {service[0]}
-                        </div>
-                        <span className="text-sm font-medium text-gray-700">
-                          {service}
-                        </span>
-                      </div>
-                    )
-                  )}
+                  {[
+                    { name: "Slack", icon: "/icons/saas/slack.png" },
+                    { name: "Zoom", icon: "/icons/saas/zoom.png" },
+                    { name: "Dropbox", icon: "/icons/saas/dropbox.png" },
+                    { name: "ChatGPT", icon: "/icons/saas/chatgpt.png" },
+                    { name: "Kintone", icon: "/icons/saas/kintone.png" },
+                    { name: "Salesforce", icon: "/icons/saas/salesforce.png" },
+                  ].map((service) => (
+                    <div
+                      key={service.name}
+                      className="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm"
+                    >
+                      <img
+                        src={service.icon}
+                        alt={service.name}
+                        className="w-10 h-10 object-contain"
+                      />
+                      <span className="text-sm font-medium text-gray-700">
+                        {service.name}
+                      </span>
+                    </div>
+                  ))}
                 </div>
                 <div className="mt-6 space-y-2 text-sm text-gray-600">
                   <p className="flex items-start gap-2">
@@ -135,6 +147,25 @@ export default function Home() {
               </div>
             </div>
 
+            {/* 矢印アイコン */}
+            <div className="flex justify-center">
+              <div className="bg-blue-100 rounded-full p-4 shadow-lg">
+                <svg
+                  className="w-8 h-8 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={3}
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </div>
+            </div>
+
             {/* After */}
             <div className="relative">
               <div className="absolute -top-4 left-4 bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-semibold">
@@ -146,9 +177,11 @@ export default function Home() {
                 </h4>
                 <div className="bg-white rounded-xl p-6 shadow-md mb-6">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white font-bold text-2xl">
-                      G
-                    </div>
+                    <img
+                      src="/icons/google/workspace.png"
+                      alt="Google Workspace"
+                      className="w-16 h-16 object-contain"
+                    />
                     <div>
                       <p className="font-bold text-gray-800">
                         Google Workspace
@@ -157,43 +190,283 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-xs text-gray-600">
-                    <span className="bg-blue-50 px-2 py-1 rounded text-center">
-                      Gmail
-                    </span>
-                    <span className="bg-blue-50 px-2 py-1 rounded text-center">
-                      Meet
-                    </span>
-                    <span className="bg-blue-50 px-2 py-1 rounded text-center">
-                      Drive
-                    </span>
-                    <span className="bg-blue-50 px-2 py-1 rounded text-center">
-                      Chat
-                    </span>
-                    <span className="bg-blue-50 px-2 py-1 rounded text-center">
-                      Sheets
-                    </span>
-                    <span className="bg-blue-50 px-2 py-1 rounded text-center">
-                      Gemini
-                    </span>
+                    {[
+                      { name: "Gmail", icon: "/icons/google/gmail.png" },
+                      { name: "Meet", icon: "/icons/google/meet.png" },
+                      { name: "Drive", icon: "/icons/google/drive.png" },
+                      { name: "Chat", icon: "/icons/google/chat.png" },
+                      { name: "Sheets", icon: "/icons/google/sheets.png" },
+                      { name: "Gemini", icon: "/icons/google/gemini.png" },
+                    ].map((app) => (
+                      <div
+                        key={app.name}
+                        className="bg-blue-50 px-2 py-1 rounded flex items-center justify-center gap-1"
+                      >
+                        <img
+                          src={app.icon}
+                          alt={app.name}
+                          className="w-4 h-4 object-contain"
+                        />
+                        <span>{app.name}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div className="space-y-2 text-sm text-gray-700">
-                  <p className="flex items-start gap-2">
-                    <span className="text-green-600 text-lg">✓</span>
-                    シングルサインオン（SSO）
-                  </p>
-                  <p className="flex items-start gap-2">
-                    <span className="text-green-600 text-lg">✓</span>
-                    一括管理・一括請求
-                  </p>
-                  <p className="flex items-start gap-2">
-                    <span className="text-green-600 text-lg">✓</span>
-                    シームレスな連携
-                  </p>
-                  <p className="flex items-start gap-2">
-                    <span className="text-green-600 text-lg">✓</span>
-                    <strong>Gemini AI内蔵</strong>
-                  </p>
+
+                {/* 各機能の詳細比較 */}
+                <div className="mt-6 space-y-6">
+                  {/* Gmail */}
+                  <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
+                        <img
+                          src="/icons/google/gmail.png"
+                          alt="Gmail"
+                          className="w-8 h-8 object-contain"
+                        />
+                      </div>
+                      <h5 className="text-lg font-bold text-gray-800">Gmail</h5>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs font-semibold text-gray-500 mb-2">従来のメールサーバー</p>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>送信済みメールがPC内だけ</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>スマホで確認できない</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-4 border-2 border-blue-200">
+                        <p className="text-xs font-semibold text-blue-700 mb-2">Google Workspace</p>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>どのデバイスでも送信履歴が見れる</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>外出先でもすぐに確認・返信</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Chat */}
+                  <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
+                        <img
+                          src="/icons/google/chat.png"
+                          alt="Chat"
+                          className="w-8 h-8 object-contain"
+                        />
+                      </div>
+                      <h5 className="text-lg font-bold text-gray-800">Chat</h5>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs font-semibold text-gray-500 mb-2">LINE・Slackなど</p>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>過去のメッセージが探しにくい</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>別料金が発生する</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-4 border-2 border-blue-200">
+                        <p className="text-xs font-semibold text-blue-700 mb-2">Google Workspace</p>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>履歴が永久保存、検索も簡単</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>追加費用なし、標準搭載</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Gemini */}
+                  <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
+                        <img
+                          src="/icons/google/gemini.png"
+                          alt="Gemini"
+                          className="w-8 h-8 object-contain"
+                        />
+                      </div>
+                      <h5 className="text-lg font-bold text-gray-800">Gemini</h5>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs font-semibold text-gray-500 mb-2">ChatGPTなど</p>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>会社情報が学習に使われる</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>情報漏洩のリスク</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-4 border-2 border-blue-200">
+                        <p className="text-xs font-semibold text-blue-700 mb-2">Google Workspace</p>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>社内情報は学習されない安心設計</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>セキュリティ対策も万全</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sheets */}
+                  <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
+                        <img
+                          src="/icons/google/sheets.png"
+                          alt="Sheets"
+                          className="w-8 h-8 object-contain"
+                        />
+                      </div>
+                      <h5 className="text-lg font-bold text-gray-800">Sheets</h5>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs font-semibold text-gray-500 mb-2">Excelファイル</p>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>同時編集できない</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>バージョン管理が大変</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-4 border-2 border-blue-200">
+                        <p className="text-xs font-semibold text-blue-700 mb-2">Google Workspace</p>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>複数人がリアルタイムで同時編集</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>自動保存で安心</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Drive */}
+                  <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
+                        <img
+                          src="/icons/google/drive.png"
+                          alt="Drive"
+                          className="w-8 h-8 object-contain"
+                        />
+                      </div>
+                      <h5 className="text-lg font-bold text-gray-800">Drive</h5>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs font-semibold text-gray-500 mb-2">社内サーバー・Dropbox</p>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>容量不足になりがち</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>サーバー費用が高額</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-4 border-2 border-blue-200">
+                        <p className="text-xs font-semibold text-blue-700 mb-2">Google Workspace</p>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>1人あたり2TB*の大容量</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>サーバー費用ゼロ、どこからでもアクセス</span>
+                          </li>
+                        </ul>
+                        <p className="text-xs text-gray-500 mt-2">*Google Workspace Business Standardの場合。</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Meet */}
+                  <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
+                        <img
+                          src="/icons/google/meet.png"
+                          alt="Meet"
+                          className="w-8 h-8 object-contain"
+                        />
+                      </div>
+                      <h5 className="text-lg font-bold text-gray-800">Meet</h5>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <p className="text-xs font-semibold text-gray-500 mb-2">Zoomなど</p>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>事前に会議URLを発行</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-red-500">✗</span>
+                            <span>録画を手動で保存・共有</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-4 border-2 border-blue-200">
+                        <p className="text-xs font-semibold text-blue-700 mb-2">Google Workspace</p>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>カレンダーからワンクリックで参加</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-green-600">✓</span>
+                            <span>録画が自動でDriveに保存・共有</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -54,6 +54,12 @@ export type DiagnosisFormData = {
   groupwarePlan?: string;
   groupwareLicenses?: number;
 
+  // グループウェアで社内サーバー選択時
+  groupwarePaymentMethod?: "purchase" | "lease";
+  groupwarePurchaseCost?: number;
+  groupwareReplaceYears?: number;
+  groupwareLeaseCost?: number;
+
   // ステップ2: 各種サービス
   videoConference?: string;
   videoConferencePlan?: string;
@@ -66,6 +72,12 @@ export type DiagnosisFormData = {
   storage?: string;
   storagePlan?: string;
   storageLicenses?: number;
+
+  // 社内サーバー関連
+  storagePaymentMethod?: "purchase" | "lease"; // 買い上げ or リース
+  storagePurchaseCost?: number; // 買い上げ時の購入費用
+  storageReplaceYears?: number; // 買い替え年数
+  storageLeaseCost?: number; // リース時の年額料金
 
   ai?: string;
   aiPlan?: string;

@@ -134,27 +134,52 @@ export function calculateCost(
 
   // クラウドストレージ
   if (formData.storage && formData.storage !== "利用していない") {
-    let planName = formData.storagePlan || "";
-    const licenseCount = formData.storageLicenses || formData.employeeCount;
-
     // 社内サーバーの特殊処理
     if (formData.storage === "社内サーバー") {
-      planName = getOnPremiseServerPlan(formData.employeeCount);
-    } else if (planName === "プランが分からない" || !planName) {
-      planName = getDefaultPlan(formData.storage) || "";
-    }
+      let annualCost = 0;
+      let planName = "社内サーバー";
 
-    const price = getPriceForService(formData.storage, planName);
-    if (price !== null) {
-      const cost = price * licenseCount;
-      totalCurrentCost += cost;
+      if (formData.storagePaymentMethod === "purchase") {
+        // 買い上げの場合: 購入費用 ÷ 買い替え年数
+        const purchaseCost = formData.storagePurchaseCost || 0;
+        const replaceYears = formData.storageReplaceYears || 5;
+        annualCost = purchaseCost / replaceYears;
+        planName = `買い上げ（${replaceYears}年）`;
+      } else if (formData.storagePaymentMethod === "lease") {
+        // リースの場合: 年額リース料金
+        annualCost = formData.storageLeaseCost || 0;
+        planName = "リース";
+      }
+
+      totalCurrentCost += annualCost;
       selectedServices.push({
         categoryName: "クラウドストレージ",
         serviceName: formData.storage,
         planName,
-        licenseCount,
-        price,
+        licenseCount: formData.employeeCount,
+        price: annualCost / formData.employeeCount, // 1人あたりの年額コスト
       });
+    } else {
+      // 通常のクラウドストレージサービス
+      let planName = formData.storagePlan || "";
+      const licenseCount = formData.storageLicenses || formData.employeeCount;
+
+      if (planName === "プランが分からない" || !planName) {
+        planName = getDefaultPlan(formData.storage) || "";
+      }
+
+      const price = getPriceForService(formData.storage, planName);
+      if (price !== null) {
+        const cost = price * licenseCount;
+        totalCurrentCost += cost;
+        selectedServices.push({
+          categoryName: "クラウドストレージ",
+          serviceName: formData.storage,
+          planName,
+          licenseCount,
+          price,
+        });
+      }
     }
   }
 

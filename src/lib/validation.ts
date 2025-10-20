@@ -44,12 +44,14 @@ export const step2Schema = z.object({
   storageLeaseCost: z.number().min(0).optional(),
 }).refine(
   (data) => {
-    return (
-      (data.groupware && data.groupware !== "利用していない") ||
-      (data.videoConference && data.videoConference !== "利用していない") ||
-      (data.businessChat && data.businessChat !== "利用していない") ||
-      (data.storage && data.storage !== "利用していない")
-    );
+    // 各サービスが選択されているかチェック（「利用していない」以外が選択されている）
+    const hasGroupware = data.groupware && data.groupware !== "利用していない" && data.groupware !== "";
+    const hasVideoConference = data.videoConference && data.videoConference !== "利用していない" && data.videoConference !== "";
+    const hasBusinessChat = data.businessChat && data.businessChat !== "利用していない" && data.businessChat !== "";
+    const hasStorage = data.storage && data.storage !== "利用していない" && data.storage !== "";
+
+    // 少なくとも1つのサービスが選択されていればOK
+    return hasGroupware || hasVideoConference || hasBusinessChat || hasStorage;
   },
   {
     message: "少なくとも1つのサービスを選択してください",
@@ -75,12 +77,14 @@ export const step3Schema = z.object({
   nocodeToolLicenses: z.number().min(1).optional(),
 }).refine(
   (data) => {
-    return (
-      (data.ai && data.ai !== "利用していない") ||
-      (data.biTool && data.biTool !== "利用していない") ||
-      (data.crmTool && data.crmTool !== "利用していない") ||
-      (data.nocodeTool && data.nocodeTool !== "利用していない")
-    );
+    // 各サービスが選択されているかチェック（「利用していない」以外が選択されている）
+    const hasAI = data.ai && data.ai !== "利用していない" && data.ai !== "";
+    const hasBITool = data.biTool && data.biTool !== "利用していない" && data.biTool !== "";
+    const hasCRMTool = data.crmTool && data.crmTool !== "利用していない" && data.crmTool !== "";
+    const hasNocodeTool = data.nocodeTool && data.nocodeTool !== "利用していない" && data.nocodeTool !== "";
+
+    // 少なくとも1つのサービスが選択されていればOK
+    return hasAI || hasBITool || hasCRMTool || hasNocodeTool;
   },
   {
     message: "少なくとも1つのサービスを選択してください",
@@ -169,17 +173,19 @@ export const diagnosisFormSchema = z.object({
   satisfaction: z.string().optional(),
 }).refine(
   (data) => {
-    // 少なくとも1つのサービスが選択されていることを確認
-    return (
-      (data.groupware && data.groupware !== "利用していない") ||
-      (data.videoConference && data.videoConference !== "利用していない") ||
-      (data.businessChat && data.businessChat !== "利用していない") ||
-      (data.storage && data.storage !== "利用していない") ||
-      (data.ai && data.ai !== "利用していない") ||
-      (data.biTool && data.biTool !== "利用していない") ||
-      (data.crmTool && data.crmTool !== "利用していない") ||
-      (data.nocodeTool && data.nocodeTool !== "利用していない")
-    );
+    // 各サービスが選択されているかチェック（「利用していない」以外が選択されている）
+    const hasGroupware = data.groupware && data.groupware !== "利用していない" && data.groupware !== "";
+    const hasVideoConference = data.videoConference && data.videoConference !== "利用していない" && data.videoConference !== "";
+    const hasBusinessChat = data.businessChat && data.businessChat !== "利用していない" && data.businessChat !== "";
+    const hasStorage = data.storage && data.storage !== "利用していない" && data.storage !== "";
+    const hasAI = data.ai && data.ai !== "利用していない" && data.ai !== "";
+    const hasBITool = data.biTool && data.biTool !== "利用していない" && data.biTool !== "";
+    const hasCRMTool = data.crmTool && data.crmTool !== "利用していない" && data.crmTool !== "";
+    const hasNocodeTool = data.nocodeTool && data.nocodeTool !== "利用していない" && data.nocodeTool !== "";
+
+    // 少なくとも1つのサービスが選択されていればOK
+    return hasGroupware || hasVideoConference || hasBusinessChat || hasStorage ||
+           hasAI || hasBITool || hasCRMTool || hasNocodeTool;
   },
   {
     message: "少なくとも1つのサービスを選択してください",

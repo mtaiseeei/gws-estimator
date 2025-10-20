@@ -78,6 +78,11 @@ export default function DiagnosisForm() {
   const crmToolCategory = categories.find((c) => c.categoryName === "CRMツール");
   const nocodeToolCategory = categories.find((c) => c.categoryName === "ノーコード/ローコード");
 
+  // 価格フォーマット関数
+  const formatPrice = (price: number): string => {
+    return `¥${price.toLocaleString()}/年`;
+  };
+
   // 選択されたサービスのプランを取得
   const getPlansForService = (categoryName: string, serviceName?: string) => {
     if (!serviceName || serviceName === "利用していない") return [];
@@ -371,7 +376,7 @@ export default function DiagnosisForm() {
                             selectedGroupware
                           ).map((plan) => (
                             <SelectItem key={plan.planName} value={plan.planName}>
-                              {plan.planName}
+                              {plan.planName} ({formatPrice(plan.price)})
                             </SelectItem>
                           ))}
                         </SelectContent>

@@ -6,7 +6,8 @@
         "serviceName": "Microsoft 365",
         "plans": [
           { "planName": "Business Basic", "price": 10788, "unit": "per_user_per_year" },
-          { "planName": "Business Standard", "price": 18720, "unit": "per_user_per_year" }
+          { "planName": "Business Standard", "price": 22488, "unit": "per_user_per_year" },
+          { "planName": "Business Premium", "price": 39576, "unit": "per_user_per_year" }
         ]
       },
       {

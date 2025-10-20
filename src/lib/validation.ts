@@ -20,22 +20,24 @@ export const step1Schema = z.object({
 
 /**
  * ステップ2: グループウェア・コミュニケーションツールのバリデーション
+ * 注: すべてのサービスに「利用していない」という選択肢があるため、
+ * すべてのフィールドをoptionalとし、UI側で選択を強制する
  */
 export const step2Schema = z.object({
-  groupware: z.string().min(1, { message: "グループウェアを選択してください" }),
+  groupware: z.string().optional(),
   groupwarePlan: z.string().optional(),
   groupwareLicenses: z.number().min(1).optional(),
   groupwarePaymentMethod: z.enum(["purchase", "lease"]).optional(),
   groupwarePurchaseCost: z.number().min(0).optional(),
   groupwareReplaceYears: z.number().min(1).optional(),
   groupwareLeaseCost: z.number().min(0).optional(),
-  videoConference: z.string().min(1, { message: "ビデオ会議ツールを選択してください" }),
+  videoConference: z.string().optional(),
   videoConferencePlan: z.string().optional(),
   videoConferenceLicenses: z.number().min(1).optional(),
-  businessChat: z.string().min(1, { message: "ビジネスチャットを選択してください" }),
+  businessChat: z.string().optional(),
   businessChatPlan: z.string().optional(),
   businessChatLicenses: z.number().min(1).optional(),
-  storage: z.string().min(1, { message: "クラウドストレージを選択してください" }),
+  storage: z.string().optional(),
   storagePlan: z.string().optional(),
   storageLicenses: z.number().min(1).optional(),
   storagePaymentMethod: z.enum(["purchase", "lease"]).optional(),
@@ -46,18 +48,20 @@ export const step2Schema = z.object({
 
 /**
  * ステップ3: 業務ツールのバリデーション
+ * 注: すべてのサービスに「利用していない」という選択肢があるため、
+ * すべてのフィールドをoptionalとし、UI側で選択を強制する
  */
 export const step3Schema = z.object({
-  ai: z.string().min(1, { message: "生成AIを選択してください" }),
+  ai: z.string().optional(),
   aiPlan: z.string().optional(),
   aiLicenses: z.number().min(1).optional(),
-  biTool: z.string().min(1, { message: "BIツールを選択してください" }),
+  biTool: z.string().optional(),
   biToolPlan: z.string().optional(),
   biToolLicenses: z.number().min(1).optional(),
-  crmTool: z.string().min(1, { message: "CRMツールを選択してください" }),
+  crmTool: z.string().optional(),
   crmToolPlan: z.string().optional(),
   crmToolLicenses: z.number().min(1).optional(),
-  nocodeTool: z.string().min(1, { message: "ノーコード/ローコードツールを選択してください" }),
+  nocodeTool: z.string().optional(),
   nocodeToolPlan: z.string().optional(),
   nocodeToolLicenses: z.number().min(1).optional(),
 });

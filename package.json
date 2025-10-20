@@ -5,9 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:clean": "npm run kill-ports && npm run dev",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "kill-ports": "lsof -ti:3000-3010 | xargs kill -9 || true",
+    "check-ports": "lsof -i :3000-3010 | grep LISTEN || echo '✅ ポート3000-3010は空いています'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -180,10 +180,24 @@ export default function DiagnosisForm() {
       }
       return true;
     } catch (error: unknown) {
-      if (error && typeof error === 'object' && 'errors' in error) {
-        const errorMessages = (error.errors as Array<{ message: string }>).map((err) => err.message);
+      console.error('Validation error:', error);
+
+      if (error && typeof error === 'object' && 'issues' in error) {
+        // Zod validation error
+        const zodError = error as { issues: Array<{ message: string; path: Array<string | number> }> };
+        const errorMessages = zodError.issues.map((issue) => {
+          const fieldName = issue.path.join('.');
+          return fieldName ? `${fieldName}: ${issue.message}` : issue.message;
+        });
         setStepErrors(errorMessages);
+      } else if (error && typeof error === 'object' && 'message' in error) {
+        // Generic error with message
+        setStepErrors([(error as { message: string }).message]);
+      } else {
+        // Unknown error
+        setStepErrors(['入力内容を確認してください']);
       }
+
       return false;
     }
   };

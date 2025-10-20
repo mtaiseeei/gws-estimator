@@ -16,7 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Progress } from "@/components/ui/progress";
 import { diagnosisFormSchema, step1Schema, step2Schema, step3Schema, step4Schema } from "@/lib/validation";
 import type { DiagnosisFormData, Category } from "@/types";
 import servicesData from "@/data/services-pricing.json";
@@ -36,7 +35,6 @@ export default function DiagnosisForm() {
     handleSubmit,
     watch,
     setValue,
-    trigger,
     getValues,
     formState: { errors },
   } = useForm<DiagnosisFormData>({
@@ -52,7 +50,6 @@ export default function DiagnosisForm() {
 
   // 選択されたサービスを監視
   const selectedGroupware = watch("groupware");
-  const selectedGroupwarePaymentMethod = watch("groupwarePaymentMethod");
   const selectedVideoConference = watch("videoConference");
   const selectedBusinessChat = watch("businessChat");
   const selectedStorage = watch("storage");
@@ -177,9 +174,9 @@ export default function DiagnosisForm() {
           break;
       }
       return true;
-    } catch (error: any) {
-      if (error.errors) {
-        const errorMessages = error.errors.map((err: any) => err.message);
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'errors' in error) {
+        const errorMessages = (error.errors as Array<{ message: string }>).map((err) => err.message);
         setStepErrors(errorMessages);
       }
       return false;

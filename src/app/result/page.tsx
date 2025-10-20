@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
@@ -154,9 +155,11 @@ export default function ResultPage() {
         <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 flex items-center justify-between">
           {/* 左側: ロゴ + タイトル */}
           <div className="flex items-center gap-3 md:gap-4">
-            <img
+            <Image
               src="/logos/company-logo.png"
               alt="ShigApps Logo"
+              width={40}
+              height={40}
               className="h-8 md:h-10 w-auto object-contain"
             />
             <h1 className="text-lg md:text-2xl font-bold text-blue-600">
@@ -365,24 +368,24 @@ export default function ResultPage() {
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
-                    table: ({ node, ...props }) => (
+                    table: ({ ...props }) => (
                       <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg" {...props} />
                       </div>
                     ),
-                    thead: ({ node, ...props }) => (
+                    thead: ({ ...props }) => (
                       <thead className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white" {...props} />
                     ),
-                    th: ({ node, ...props }) => (
+                    th: ({ ...props }) => (
                       <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider" {...props} />
                     ),
-                    td: ({ node, ...props }) => (
+                    td: ({ ...props }) => (
                       <td className="px-6 py-4 text-sm text-gray-700 border-t border-gray-200" {...props} />
                     ),
-                    tbody: ({ node, ...props }) => (
+                    tbody: ({ ...props }) => (
                       <tbody className="bg-white divide-y divide-gray-200" {...props} />
                     ),
-                    tr: ({ node, ...props }) => (
+                    tr: ({ ...props }) => (
                       <tr className="hover:bg-blue-50 transition-colors" {...props} />
                     ),
                   }}
@@ -486,9 +489,11 @@ export default function ResultPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center gap-2 mb-6">
-              <img
+              <Image
                 src="/logos/company-logo.png"
                 alt="ShigApps Logo"
+                width={32}
+                height={32}
                 className="h-8 w-auto object-contain"
               />
               <span className="text-xl font-bold">ShigApps Inc.</span>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import DiagnosisForm from "@/components/DiagnosisForm";
 
 export default function Home() {
@@ -6,9 +7,11 @@ export default function Home() {
       {/* ヘッダー */}
       <header className="bg-white shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 flex items-center gap-3 md:gap-4">
-          <img
+          <Image
             src="/logos/company-logo.png"
             alt="ShigApps Logo"
+            width={40}
+            height={40}
             className="h-8 md:h-10 w-auto object-contain"
           />
           <h1 className="text-xl md:text-2xl font-bold text-blue-600">
@@ -119,9 +122,11 @@ export default function Home() {
                       key={service.name}
                       className="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm"
                     >
-                      <img
+                      <Image
                         src={service.icon}
                         alt={service.name}
+                        width={40}
+                        height={40}
                         className="w-10 h-10 object-contain"
                       />
                       <span className="text-sm font-medium text-gray-700">
@@ -177,9 +182,11 @@ export default function Home() {
                 </h4>
                 <div className="bg-white rounded-xl p-6 shadow-md mb-6">
                   <div className="flex items-center gap-4 mb-4">
-                    <img
+                    <Image
                       src="/icons/google/workspace.png"
                       alt="Google Workspace"
+                      width={64}
+                      height={64}
                       className="w-16 h-16 object-contain"
                     />
                     <div>
@@ -202,9 +209,11 @@ export default function Home() {
                         key={app.name}
                         className="bg-blue-50 px-2 py-1 rounded flex items-center justify-center gap-1"
                       >
-                        <img
+                        <Image
                           src={app.icon}
                           alt={app.name}
+                          width={16}
+                          height={16}
                           className="w-4 h-4 object-contain"
                         />
                         <span>{app.name}</span>
@@ -219,9 +228,11 @@ export default function Home() {
                   <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
-                        <img
+                        <Image
                           src="/icons/google/gmail.png"
                           alt="Gmail"
+                          width={32}
+                          height={32}
                           className="w-8 h-8 object-contain"
                         />
                       </div>
@@ -261,9 +272,11 @@ export default function Home() {
                   <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
-                        <img
+                        <Image
                           src="/icons/google/chat.png"
                           alt="Chat"
+                          width={32}
+                          height={32}
                           className="w-8 h-8 object-contain"
                         />
                       </div>
@@ -303,9 +316,11 @@ export default function Home() {
                   <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
-                        <img
+                        <Image
                           src="/icons/google/gemini.png"
                           alt="Gemini"
+                          width={32}
+                          height={32}
                           className="w-8 h-8 object-contain"
                         />
                       </div>
@@ -345,9 +360,11 @@ export default function Home() {
                   <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
-                        <img
+                        <Image
                           src="/icons/google/sheets.png"
                           alt="Sheets"
+                          width={32}
+                          height={32}
                           className="w-8 h-8 object-contain"
                         />
                       </div>
@@ -387,9 +404,11 @@ export default function Home() {
                   <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
-                        <img
+                        <Image
                           src="/icons/google/drive.png"
                           alt="Drive"
+                          width={32}
+                          height={32}
                           className="w-8 h-8 object-contain"
                         />
                       </div>
@@ -430,9 +449,11 @@ export default function Home() {
                   <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
-                        <img
+                        <Image
                           src="/icons/google/meet.png"
                           alt="Meet"
+                          width={32}
+                          height={32}
                           className="w-8 h-8 object-contain"
                         />
                       </div>
